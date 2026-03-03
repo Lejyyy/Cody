@@ -6,11 +6,11 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show]
 
-  resources :projects, only: [:index, :show, :new, :create] do
-    resources :chats, only: [:create] # create a chat for a project
+  resources :projects, only: [:index, :show] do
+    resources :chats, only: [:create]
   end
 
-  resources :chats, only: [:show, :destroy] do
+  resources :chats, only: [:destroy] do
     resources :messages, only: [:create]
   end
 end
