@@ -33,21 +33,21 @@ class MessagesController < ApplicationController
 
   def build_prompt(project, user_input)
     <<~PROMPT
-    Tu es un assistant IA qui aide un développeur à structurer son projet.
+      Tu es un assistant IA qui aide un développeur à structurer son projet.
 
-    Projet :
-    - Titre : #{project.title}
-    - Description : #{project.description}
+      Projet :
+      - Titre : #{project.name}
+      - Description : #{project.content}
 
-    Message utilisateur :
-    #{user_input}
+      Message utilisateur :
+      #{user_input}
 
-    Réponds de façon structurée :
-    1. Compréhension du besoin
-    2. MVP conseillé
-    3. Stack recommandée
-    4. Profils nécessaires
-    5. Risques & quick wins
+      Réponds de façon structurée :
+      1. Compréhension du besoin
+      2. MVP conseillé
+      3. Stack recommandée
+      4. Profils nécessaires
+      5. Risques & quick wins
     PROMPT
   end
 end

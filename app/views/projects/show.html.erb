@@ -1,0 +1,24 @@
+<h1><%= @project.name %></h1>
+<p><%= @project.content %></p>
+
+<hr>
+
+<% if @chat %>
+  <h2>Chat</h2>
+
+  <div id="messages">
+    <% @messages.each do |m| %>
+      <p><strong><%= m.role %> :</strong> <%= m.content %></p>
+    <% end %>
+  </div>
+
+  <%= form_with model: [@chat, @message] do |f| %>
+    <%= f.text_area :content %>
+    <%= f.submit "Envoyer" %>
+  <% end %>
+
+  <%= button_to "Supprimer le chat", chat_path(@chat), method: :delete %>
+
+<% else %>
+  <%= button_to "Créer un chat", project_chat_path(@project), method: :post %>
+<% end %>

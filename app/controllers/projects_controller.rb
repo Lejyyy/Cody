@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = current_user.projects
+    @projects = current_user.projects.order(created_at: :desc).includes(:chat)
   end
 
   def show
