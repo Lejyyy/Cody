@@ -92,44 +92,39 @@
   </section>
 
   <!-- PROJECT CARDS -->
-  <section class="container py-5">
-    <div class="row g-4">
+<section class="container py-5">
+  <div class="row g-4">
 
-      <% 4.times do %>
-        <section class="container py-5">
-          <div class="row g-4">
-            <% @projects.each do |project| %>
-            <div class="col-md-4">
-              <div class="card shadow-sm h-100">
+    <% @projects.each do |project| %>
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100">
 
-                <div class="card-body">
-                <h5 class="card-title fw-semibold"><%= project.title %></h5>
+          <div class="card-body">
+            <h5 class="card-title fw-semibold"><%= project.name %></h5>
 
-                <div class="mb-3">
-                  <% project.each do |t| %>
-                    <span class="badge bg-secondary"><%= tag %></span>
-                  <% end %>
-                </div>
-
-                <p class="text-muted">
-                <%= truncate(project.description, length: 120) %>
-                </p>
-
-                <ul class="list-unstyled small text-muted mt-3">
-                  <li>Durée : <%= project.duration %></li>
-                  <li>Équipe : <%= project.team_size %></li>
-                  <li>Niveau : <%= project.level %></li>
-                </ul>
-                </div>
-
-              </div>
+            <div class="mb-3">
+              <% (project.tags || []).each do |tag| %>
+                <span class="badge bg-secondary"><%= tag %></span>
+              <% end %>
             </div>
-            <% end %>
+
+            <p class="text-muted">
+              <%= truncate(project.description, length: 120) %>
+            </p>
+
+            <ul class="list-unstyled small text-muted mt-3">
+              <li>Durée : <%= project.duration %></li>
+              <li>Équipe : <%= project.team_size %></li>
+              <li>Niveau : <%= project.level %></li>
+            </ul>
           </div>
-        </section>
-      <% end %>
-    </div>
-  </section>
+
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</section>
 
 
   <!-- FOOTER CTA -->

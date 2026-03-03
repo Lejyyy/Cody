@@ -1,24 +1,61 @@
-<h1><%= @project.name %></h1>
-<p><%= @project.content %></p>
+<div class="container py-5">
 
-<hr>
+  <!-- TITRE -->
+  <h1 class="fw-bold mb-4"><%= @project.name %></h1>
 
-<% if @chat %>
-  <h2>Chat</h2>
-
-  <div id="messages">
-    <% @messages.each do |m| %>
-      <p><strong><%= m.role %> :</strong> <%= m.content %></p>
+  <!-- TAGS -->
+  <div class="mb-4">
+    <% (@project.tags || []).each do |tag| %>
+      <span class="badge bg-secondary"><%= tag %></span>
     <% end %>
   </div>
 
-  <%= form_with model: [@chat, @message] do |f| %>
-    <%= f.text_area :content %>
-    <%= f.submit "Envoyer" %>
+  <!-- DESCRIPTION -->
+  <p class="text-muted fs-5"><%= @project.content %></p>
+
+  <hr class="my-5">
+
+  <!-- INFOS -->
+  <div class="row mb-5">
+    <div class="col-md-4">
+      <h5 class="fw-semibold">Durée</h5>
+      <p><%= @project.duration %></p>
+    </div>
+
+    <div class="col-md-4">
+      <h5 class="fw-semibold">Taille de l'équipe</h5>
+      <p><%= @project.team_size %></p>
+    </div>
+
+    <div class="col-md-4">
+      <h5 class="fw-semibold">Niveau</h5>
+      <p><%= @project.level %></p>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- CHAT -->
+  <% if @chat %>
+    <h2 class="fw-bold mb-4">Chat</h2>
+
+    <div id="messages" class="mb-4 p-3 bg-light rounded border">
+      <% @messages.each do |m| %>
+        <p><strong><%= m.role %> :</strong> <%= m.content %></p>
+      <% end %>
+    </div>
+
+    <%= form_with model: [@chat, @message], class: "mb-3" do |f| %>
+      <div class="mb-3">
+        <%= f.text_area :content, class: "form-control", rows: 3 %>
+      </div>
+      <%= f.submit "Envoyer", class: "btn btn-primary" %>
+    <% end %>
+
+    <%= button_to "Supprimer le chat", chat_path(@chat), method: :delete, class: "btn btn-danger mt-3" %>
+
+  <% else %>
+    <%= button_to "Créer un chat", project_chat_path(@project), method: :post, class: "btn btn-primary" %>
   <% end %>
 
-  <%= button_to "Supprimer le chat", chat_path(@chat), method: :delete %>
-
-<% else %>
-  <%= button_to "Créer un chat", project_chat_path(@project), method: :post %>
-<% end %>
+</div>
