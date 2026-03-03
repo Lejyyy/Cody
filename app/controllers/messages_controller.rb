@@ -10,7 +10,11 @@ class MessagesController < ApplicationController
 
     prompt = build_prompt(chat.project, user_message.content)
 
-    ai_text = RubyLLM.chat.ask(prompt).content
+    begin
+      ai_text = RubyLLM.chat.ask(prompt).content
+    rescue StandardError => e
+      ai_text = "Désolé, l'assistant IA est indisponible pour le moment. (#{e.class})"
+    end
 
     chat.messages.create!(
       user: current_user,
