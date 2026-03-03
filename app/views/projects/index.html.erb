@@ -1,42 +1,25 @@
-<div class="container mt-4">
-  <h1 class="mb-4">Mes projets</h1>
+<div class="row">
+  <% @projects.each do |project| %>
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title"><%= project.title %></h5>
 
-  <div class="row">
-    <% @projects.each do |project| %>
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card shadow-sm h-100">
-
-          <div class="card-body">
-            <h5 class="card-title"><%= project.name %></h5>
-
-            <p class="card-text text-muted">
-              <%= truncate(project.content, length: 120) %>
-            </p>
-
-            <%# Badge de niveau %>
-            <% level_class = case project.level_project
-              when "low" then "bg-success"
-              when "medium" then "bg-warning text-dark"
-              when "high" then "bg-danger"
-            end %>
-
-            <span class="badge <%= level_class %>">
-              <%= project.level_project.capitalize %>
-            </span>
-
-            <hr>
-
-            <p class="small text-secondary">
-              <strong>Stack :</strong> <%= project.stack %>
-            </p>
+          <div class="mb-3">
+            <% project.tags.each do |tag| %>
+              <span class="badge bg-secondary"><%= tag %></span>
+            <% end %>
           </div>
 
-          <div class="card-footer bg-white border-0">
-            <%= link_to "Ouvrir le projet", project_path(project), class: "btn btn-primary w-100" %>
-          </div>
+          <p class="card-text text-muted"><%= truncate(project.description, length: 120) %></p>
 
+          <ul class="list-unstyled small text-muted">
+            <li>Durée : <%= project.duration %></li>
+            <li>Équipe : <%= project.team_size %></li>
+            <li>Niveau : <%= project.level %></li>
+          </ul>
         </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>

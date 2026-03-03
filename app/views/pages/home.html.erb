@@ -1,0 +1,144 @@
+<div class="min-vh-100 bg-light">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 px-4">
+    <a class="navbar-brand fs-3 fw-bold" href="#">Codemate</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav align-items-center gap-3">
+        <li class="nav-item"><a class="nav-link" href="#">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Profils</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">News</a></li>
+        <li class="nav-item"><a class="btn btn-outline-secondary" href="#">Sign in</a></li>
+        <li class="nav-item"><a class="btn btn-primary text-white" href="#">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="container py-5">
+    <div class="row align-items-center g-5">
+
+      <div class="col-md-6">
+        <h1 class="display-4 fw-bold mb-4">Find your next project and build your Portfolio</h1>
+        <p class="text-muted mb-4">Rejoins des centaines de développeurs et construis ton expérience.</p>
+
+        <a href="#" class="btn btn-primary btn-lg me-3">Créer un projet</a>
+        <a href="#" class="btn btn-outline-secondary btn-lg">Chercher un projet</a>
+      </div>
+
+      <div class="col-md-6">
+        <div class="p-4 bg-white shadow rounded">
+
+          <div class="row text-center mb-4">
+            <div class="col">
+              <h2 class="fw-bold">247</h2>
+              <p class="text-muted">Projets complétés</p>
+            </div>
+            <div class="col">
+              <h2 class="fw-bold">1837</h2>
+              <p class="text-muted">Active developers</p>
+            </div>
+          </div>
+
+          <h5 class="fw-semibold mb-3">Derniers projets complétés</h5>
+          <ul class="list-unstyled text-muted">
+            <li>• Portfolio Website Builder</li>
+            <li>• Habit Tracker App</li>
+            <li>• Code Snippet Manager</li>
+            <li>• Blog Platform</li>
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SEARCH + FILTERS -->
+  <section class="bg-white shadow-sm py-4">
+    <div class="container">
+      <div class="row g-3">
+
+        <div class="col-md-3">
+          <select class="form-select">
+            <option>All stacks</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select class="form-select">
+            <option>All levels</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select class="form-select">
+            <option>September</option>
+          </select>
+        </div>
+
+        <div class="col-md-3 d-flex">
+          <input type="text" class="form-control" placeholder="Search projects...">
+          <button class="btn btn-primary ms-2">Search</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT CARDS -->
+  <section class="container py-5">
+    <div class="row g-4">
+
+      <% 4.times do %>
+        <section class="container py-5">
+          <div class="row g-4">
+            <% @projects.each do |project| %>
+            <div class="col-md-4">
+              <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+                <h5 class="card-title fw-semibold"><%= project.title %></h5>
+
+                <div class="mb-3">
+                  <% project.each do |t| %>
+                    <span class="badge bg-secondary"><%= tag %></span>
+                  <% end %>
+                </div>
+
+                <p class="text-muted">
+                <%= truncate(project.description, length: 120) %>
+                </p>
+
+                <ul class="list-unstyled small text-muted mt-3">
+                  <li>Durée : <%= project.duration %></li>
+                  <li>Équipe : <%= project.team_size %></li>
+                  <li>Niveau : <%= project.level %></li>
+                </ul>
+                </div>
+
+              </div>
+            </div>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+  </section>
+
+
+  <!-- FOOTER CTA -->
+  <footer class="text-center bg-dark text-white py-5">
+    <h2 class="fw-bold mb-3">Start building</h2>
+    <p class="text-light mb-4">Rejoins des centaines de développeurs junior et crée ton équipe.</p>
+
+    <a href="#" class="btn btn-primary btn-lg me-3">Créer un projet</a>
+    <a href="#" class="btn btn-outline-light btn-lg">Chercher un projet</a>
+  </footer>
+
+</div>
