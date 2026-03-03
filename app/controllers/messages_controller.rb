@@ -2,13 +2,13 @@ class MessagesController < ApplicationController
   def create
     chat = current_user.chats.find(params[:chat_id])
 
-    user_msg = chat.messages.create!(
+    user_message = chat.messages.create!(
       user: current_user,
       role: "user",
-      content: params.require(:message).fetch(:content)
+      content: message_params[:content]
     )
 
-    prompt = build_prompt(chat.project, user_msg.content)
+    prompt = build_prompt(chat.project, user_message.content)
 
     ai_text = RubyLLM.chat.ask(prompt).content
 
@@ -18,28 +18,32 @@ class MessagesController < ApplicationController
       content: ai_text
     )
 
-    redirect_to chat_path(chat)
+    redirect_to project_path(chat.project)
   end
 
   private
 
-  def build_prompt(project, user_content)
+  def message_params
+    params.require(:message).permit(:content)
+  end
+
+  def build_prompt(project, user_input)
     <<~PROMPT
-      Tu es un assistant IA pour développeur web. Contexte projet :
-      - Titre : #{project.title}
-      - Description : #{project.description}
-      - Objectif : #{project.goal}
-      - Stack actuelle : #{project.stack}
+    Tu es un assistant IA qui aide un développeur à structurer son projet.
 
-      Message utilisateur :
-      #{user_content}
+    Projet :
+    - Titre : #{project.title}
+    - Description : #{project.description}
 
-      Réponds de façon structurée :
-      1) Compréhension du besoin
-      2) Suggestions produit (MVP puis évolutions)
-      3) Stack & architecture recommandée
-      4) Profils nécessaires / roadmap
-      5) Risques + quick wins
+    Message utilisateur :
+    #{user_input}
+
+    Réponds de façon structurée :
+    1. Compréhension du besoin
+    2. MVP conseillé
+    3. Stack recommandée
+    4. Profils nécessaires
+    5. Risques & quick wins
     PROMPT
   end
 end
