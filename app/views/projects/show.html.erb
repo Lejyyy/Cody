@@ -16,11 +16,24 @@
           method: :post,
           class: "btn btn-primary" %>
   <% else %>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="h5 mb-0">Discussion</h2>
+
+      <%= button_to "Supprimer le chat",
+            chat_path(@chat),
+            method: :delete,
+            class: "btn btn-outline-danger btn-sm",
+            form: { data: { turbo_confirm: "Supprimer ce chat ?" } } %>
+    </div>
+
     <div class="border rounded p-3 mb-3" style="min-height: 260px;">
       <% if @messages.present? %>
         <% @messages.each do |m| %>
           <div class="mb-3">
-            <div class="small text-muted"><%= m.role == "assistant" ? "Assistant" : "Moi" %></div>
+            <div class="small text-muted">
+              <%= m.role == "assistant" ? "Assistant" : "Moi" %>
+              · <%= l(m.created_at, format: :short) %>
+            </div>
             <div><%= simple_format(m.content) %></div>
           </div>
         <% end %>
@@ -31,17 +44,12 @@
 
     <%= form_with model: [@chat, @message] do |f| %>
       <div class="mb-2">
-        <%= f.text_area :content, rows: 3, class: "form-control", placeholder: "Écris ton message..." %>
+        <%= f.text_area :content,
+              rows: 3,
+              class: "form-control",
+              placeholder: "Explique ton besoin (MVP, stack, roadmap, risques…)..." %>
       </div>
-      <div class="d-flex gap-2">
-        <%= f.submit "Envoyer", class: "btn btn-primary" %>
-
-        <%= button_to "Supprimer le chat",
-              chat_path(@chat),
-              method: :delete,
-              class: "btn btn-outline-danger",
-              form: { data: { turbo_confirm: "Supprimer ce chat ?" } } %>
-      </div>
+      <%= f.submit "Envoyer", class: "btn btn-primary" %>
     <% end %>
   <% end %>
 </div>
