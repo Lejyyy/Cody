@@ -1,0 +1,101 @@
+<div class="container py-4" style="max-width: 920px;">
+  <div class="mb-3">
+    <%= link_to "← Back to projects", projects_path, class: "text-decoration-none" %>
+  </div>
+
+  <h1 class="mb-1">Create a New Project</h1>
+  <p class="text-muted mb-4">Start your collaborative project and build your team</p>
+
+  <!-- Simple "stepper" look like your mockup (visual only) -->
+  <div class="d-flex justify-content-center gap-4 mb-4">
+    <div class="text-center">
+      <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
+           style="width:36px;height:36px;background:#ff8a00;color:white;">1</div>
+      <div class="small mt-1">Basics</div>
+    </div>
+    <div class="text-center">
+      <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
+           style="width:36px;height:36px;background:#e9ecef;color:#6c757d;">2</div>
+      <div class="small mt-1 text-muted">Team & Stack</div>
+    </div>
+    <div class="text-center">
+      <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
+           style="width:36px;height:36px;background:#e9ecef;color:#6c757d;">3</div>
+      <div class="small mt-1 text-muted">Timeline</div>
+    </div>
+    <div class="text-center">
+      <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
+           style="width:36px;height:36px;background:#e9ecef;color:#6c757d;">4</div>
+      <div class="small mt-1 text-muted">Review</div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-4">
+      <h2 class="h5 mb-3">Project Basics</h2>
+
+      <%= form_with model: @project do |f| %>
+
+        <div class="mb-3">
+          <%= f.label :name, "Project Title*", class: "form-label" %>
+          <%= f.text_field :name, class: "form-control", placeholder: "e.g., Task Management App with Real-time Collaboration", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :short_description, "Short Description*", class: "form-label" %>
+          <%= f.text_area :short_description, class: "form-control", rows: 2,
+                placeholder: "Brief description that will appear on project card (max 150 characters)",
+                required: true %>
+          <div class="form-text">Max 150 characters recommended.</div>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :content, "Long Description*", class: "form-label" %>
+          <%= f.text_area :content, class: "form-control", rows: 5,
+                placeholder: "Describe the problem, key features, constraints, and what success looks like.",
+                required: true %>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <%= f.label :category, "Project Category*", class: "form-label" %>
+            <%= f.select :category,
+                  ["Web App", "Mobile App", "API", "CLI Tool", "Library", "Design System", "Other"],
+                  { prompt: "Select a category" },
+                  class: "form-select",
+                  required: true %>
+          </div>
+
+          <div class="col-md-6">
+            <%= f.label :duration, "Duration*", class: "form-label" %>
+            <%= f.select :duration,
+                  ["1-2 weeks", "3-4 weeks", "1-2 months", "3-4 months", "3+ months"],
+                  { prompt: "Select a duration" },
+                  class: "form-select",
+                  required: true %>
+          </div>
+
+          <div class="col-md-6">
+            <%= f.label :level_project, "Skill Level*", class: "form-label" %>
+            <%= f.select :level_project,
+                  ["Junior", "Intermediate", "Advanced"],
+                  { prompt: "Select a level" },
+                  class: "form-select",
+                  required: true %>
+          </div>
+
+          <div class="col-md-6">
+            <%= f.label :stack, "Tech Stack (optional)", class: "form-label" %>
+            <%= f.text_field :stack, class: "form-control", placeholder: "e.g., Rails, Postgres, Hotwire" %>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <%= link_to "Cancel", projects_path, class: "btn btn-outline-secondary" %>
+          <%= f.submit "Continue", class: "btn btn-primary", style: "background:#ff8a00;border-color:#ff8a00;" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
