@@ -1,8 +1,11 @@
 <div class="container py-4">
   <div class="mb-3">
-    <h1 class="mb-1"><%= @project.respond_to?(:title) ? @project.title : @project.name %></h1>
-    <% desc = @project.respond_to?(:description) ? @project.description : @project.content %>
-    <p class="text-muted"><%= simple_format(desc.to_s) %></p>
+    <h1 class="mb-1"><%= @project.name %></h1>
+    <p class="text-muted"><%= simple_format(@project.content.to_s) %></p>
+
+    <% if @project.stack.present? %>
+      <div class="small text-muted">Stack : <%= @project.stack %></div>
+    <% end %>
   </div>
 
   <hr>
@@ -13,15 +16,15 @@
           method: :post,
           class: "btn btn-primary" %>
   <% else %>
-    <div class="border rounded p-3 mb-3" style="min-height: 240px;">
-      <% @messages.each do |m| %>
-        <div class="mb-3">
-          <div class="small text-muted"><%= m.role == "assistant" ? "Assistant" : "Moi" %></div>
-          <div><%= simple_format(m.content) %></div>
-        </div>
-      <% end %>
-
-      <% if @messages.empty? %>
+    <div class="border rounded p-3 mb-3" style="min-height: 260px;">
+      <% if @messages.present? %>
+        <% @messages.each do |m| %>
+          <div class="mb-3">
+            <div class="small text-muted"><%= m.role == "assistant" ? "Assistant" : "Moi" %></div>
+            <div><%= simple_format(m.content) %></div>
+          </div>
+        <% end %>
+      <% else %>
         <p class="text-muted mb-0">Aucun message pour l’instant.</p>
       <% end %>
     </div>
