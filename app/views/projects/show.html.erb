@@ -1,61 +1,44 @@
-<div class="container py-5">
-
-  <!-- TITRE -->
-  <h1 class="fw-bold mb-4"><%= @project.name %></h1>
-
-  <!-- TAGS -->
-  <div class="mb-4">
-    <% (@project.tags || []).each do |tag| %>
-      <span class="badge bg-secondary"><%= tag %></span>
-    <% end %>
+<div class="container py-4">
+  <div class="mb-3">
+    <h1 class="mb-1"><%= @project.respond_to?(:title) ? @project.title : @project.name %></h1>
+    <% desc = @project.respond_to?(:description) ? @project.description : @project.content %>
+    <p class="text-muted"><%= simple_format(desc.to_s) %></p>
   </div>
 
-  <!-- DESCRIPTION -->
-  <p class="text-muted fs-5"><%= @project.content %></p>
+  <hr>
 
-  <hr class="my-5">
-
-  <!-- INFOS -->
-  <div class="row mb-5">
-    <div class="col-md-4">
-      <h5 class="fw-semibold">Durée</h5>
-      <p><%= @project.duration %></p>
-    </div>
-
-    <div class="col-md-4">
-      <h5 class="fw-semibold">Taille de l'équipe</h5>
-      <p><%= @project.team_size %></p>
-    </div>
-
-    <div class="col-md-4">
-      <h5 class="fw-semibold">Niveau</h5>
-      <p><%= @project.level %></p>
-    </div>
-  </div>
-
-  <hr class="my-5">
-
-  <!-- CHAT -->
-  <% if @chat %>
-    <h2 class="fw-bold mb-4">Chat</h2>
-
-    <div id="messages" class="mb-4 p-3 bg-light rounded border">
+  <% if @chat.nil? %>
+    <%= button_to "Démarrer le chat IA",
+          project_chats_path(@project),
+          method: :post,
+          class: "btn btn-primary" %>
+  <% else %>
+    <div class="border rounded p-3 mb-3" style="min-height: 240px;">
       <% @messages.each do |m| %>
-        <p><strong><%= m.role %> :</strong> <%= m.content %></p>
+        <div class="mb-3">
+          <div class="small text-muted"><%= m.role == "assistant" ? "Assistant" : "Moi" %></div>
+          <div><%= simple_format(m.content) %></div>
+        </div>
+      <% end %>
+
+      <% if @messages.empty? %>
+        <p class="text-muted mb-0">Aucun message pour l’instant.</p>
       <% end %>
     </div>
 
-    <%= form_with model: [@chat, @message], class: "mb-3" do |f| %>
-      <div class="mb-3">
-        <%= f.text_area :content, class: "form-control", rows: 3 %>
+    <%= form_with model: [@chat, @message] do |f| %>
+      <div class="mb-2">
+        <%= f.text_area :content, rows: 3, class: "form-control", placeholder: "Écris ton message..." %>
       </div>
-      <%= f.submit "Envoyer", class: "btn btn-primary" %>
+      <div class="d-flex gap-2">
+        <%= f.submit "Envoyer", class: "btn btn-primary" %>
+
+        <%= button_to "Supprimer le chat",
+              chat_path(@chat),
+              method: :delete,
+              class: "btn btn-outline-danger",
+              form: { data: { turbo_confirm: "Supprimer ce chat ?" } } %>
+      </div>
     <% end %>
-
-    <%= button_to "Supprimer le chat", chat_path(@chat), method: :delete, class: "btn btn-danger mt-3" %>
-
-  <% else %>
-    <%= button_to "Créer un chat", project_chat_path(@project), method: :post, class: "btn btn-primary" %>
   <% end %>
-
 </div>
