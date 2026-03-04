@@ -94,7 +94,7 @@ projects.each_with_index do |attrs, i|
     chat: chat,
     user: user,
     role: "user",
-    content: "Salut, peux-tu m’aider sur ce projet ?"
+    content: "Salut, peux-tu m'aider sur ce projet ?"
   )
 
   Message.create!(
