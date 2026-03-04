@@ -1,12 +1,13 @@
 <div class="container py-5">
   <h1 class="mb-2">Cody — AI Assistant</h1>
   <p class="text-muted mb-4">
-    Décris ton projet web, et l’assistant te propose un MVP, une stack et une roadmap.
+    Décris ton projet web, et l'assistant te propose un MVP, une stack et une roadmap.
   </p>
 
   <% if user_signed_in? %>
     <div class="d-flex gap-2">
-      <%= link_to "Voir les projets", projects_path, class: "btn btn-primary" %>
+      <%= link_to "Voir mes projets", projects_path, class: "btn btn-primary" %>
+      <%= link_to "Se déconnecter", destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
     </div>
   <% else %>
     <div class="d-flex gap-2">
@@ -15,3 +16,6 @@
     </div>
   <% end %>
 </div>
+
+
+
