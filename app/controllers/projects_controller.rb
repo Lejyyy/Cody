@@ -1,3 +1,4 @@
+# app/controllers/projects_controller.rb
 class ProjectsController < ApplicationController
   def index
     @projects = current_user.projects.order(created_at: :desc)
@@ -16,7 +17,21 @@ class ProjectsController < ApplicationController
 
   def create
     @project = current_user.projects.build(project_params)
+
     if @project.save
+      chat = current_user.chats.find_or_create_by!(project: @project)
+
+      # Génère un premier message IA uniquement si le chat est vide (évite doublons)
+      if chat.messages.none?
+        ai_text = kickoff_ai_for(@project)
+
+        chat.messages.create!(
+          user: current_user,
+          role: "assistant",
+          content: ai_text
+        )
+      end
+
       redirect_to project_path(@project), notice: "Projet créé."
     else
       render :new, status: :unprocessable_entity
@@ -26,6 +41,64 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :short_description, :content, :category, :duration, :level_project, :stack)
+    params.require(:project).permit(
+      :name,
+      :short_description,
+      :content,
+      :category,
+      :duration,
+      :level_project,
+      :stack
+    )
+  end
+
+  def kickoff_ai_for(project)
+    prompt = <<~PROMPT
+      Tu es un assistant IA spécialisé dans la création d'équipes pour projets tech (Dream Team).
+      Ta mission : aider un développeur à structurer rapidement un projet et identifier les bons profils.
+
+      Contexte du projet (formulaire) :
+      - Titre : #{project.name}
+      - Catégorie : #{project.category}
+      - Durée : #{project.duration}
+      - Niveau : #{project.level_project}
+      - Stack : #{project.stack}
+      - Short description : #{project.short_description}
+      - Long description : #{project.content}
+
+      Réponds en Markdown, de façon très structurée :
+
+      ## 1) Résumé du projet (en 3 lignes max)
+
+      ## 2) MVP recommandé (3 à 6 features)
+      - ...
+
+      ## 3) Architecture / Stack conseillée
+      - Front :
+      - Back :
+      - DB :
+      - Auth :
+      - Hébergement / Déploiement :
+
+      ## 4) Dream Team (profils + responsabilités + pourquoi)
+      Pour chaque profil :
+      - Rôle :
+      - Missions :
+      - Pourquoi c'est utile :
+      - Seniorité recommandée :
+
+      ## 5) Roadmap (phases courtes)
+      - Phase 1 (Semaine 1) :
+      - Phase 2 :
+      - Phase 3 :
+
+      ## 6) Risques & quick wins
+      - Risques :
+      - Quick wins :
+    PROMPT
+
+    RubyLLM.chat.ask(prompt).content
+  rescue StandardError => e
+    "Désolé, l'assistant IA est indisponible pour le moment. (#{e.class})"
   end
 end
