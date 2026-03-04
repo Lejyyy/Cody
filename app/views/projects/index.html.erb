@@ -1,25 +1,24 @@
-<div class="row">
-  <% @projects.each do |project| %>
-    <div class="col-md-4 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <h5 class="card-title"><%= project.title %></h5>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Mes projets</h1>
+  </div>
 
-          <div class="mb-3">
-            <% project.tags.each do |tag| %>
-              <span class="badge bg-secondary"><%= tag %></span>
-            <% end %>
+  <% if @projects.any? %>
+    <div class="list-group">
+      <% @projects.each do |project| %>
+        <%= link_to project_path(project), class: "list-group-item list-group-item-action" do %>
+          <div class="d-flex justify-content-between">
+            <strong><%= project.respond_to?(:title) ? project.title : project.name %></strong>
+            <small class="text-muted"><%= l(project.created_at, format: :short) %></small>
           </div>
-
-          <p class="card-text text-muted"><%= truncate(project.description, length: 120) %></p>
-
-          <ul class="list-unstyled small text-muted">
-            <li>Durée : <%= project.duration %></li>
-            <li>Équipe : <%= project.team_size %></li>
-            <li>Niveau : <%= project.level %></li>
-          </ul>
-        </div>
-      </div>
+          <div class="text-muted">
+            <% desc = project.respond_to?(:description) ? project.description : project.content %>
+            <%= truncate(desc.to_s, length: 120) %>
+          </div>
+        <% end %>
+      <% end %>
     </div>
+  <% else %>
+    <p class="text-muted">Aucun projet pour l’instant.</p>
   <% end %>
 </div>
