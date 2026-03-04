@@ -1,9 +1,6 @@
 <div class="container py-4">
-
   <div class="mb-3">
-    <%= link_to "← Retour à mes projets",
-          projects_path,
-          class: "btn btn-outline-secondary mb-3" %>
+    <%= link_to "← Retour à mes projets", projects_path, class: "btn btn-outline-secondary mb-3" %>
 
     <h1 class="mb-1"><%= @project.name %></h1>
     <p class="text-muted"><%= simple_format(@project.content.to_s) %></p>
@@ -12,12 +9,12 @@
       <div class="small text-muted">Stack : <%= @project.stack %></div>
     <% end %>
   </div>
-  
+
   <hr>
 
   <% if @chat.nil? %>
     <%= button_to "Démarrer le chat IA",
-          project_chats_path(@project),
+          project_chat_path(@project),
           method: :post,
           class: "btn btn-primary" %>
   <% else %>
@@ -25,7 +22,7 @@
       <h2 class="h5 mb-0">Discussion</h2>
 
       <%= button_to "Supprimer le chat",
-            chat_path(@chat),
+            project_chat_path(@project),
             method: :delete,
             class: "btn btn-outline-danger btn-sm",
             form: { data: { turbo_confirm: "Supprimer ce chat ?" } } %>
@@ -47,7 +44,7 @@
       <% end %>
     </div>
 
-    <%= form_with model: [@chat, @message] do |f| %>
+    <%= form_with url: project_chat_messages_path(@project), scope: :message do |f| %>
       <div class="mb-2">
         <%= f.text_area :content,
               rows: 3,

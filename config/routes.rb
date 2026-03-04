@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       post :kickoff
     end
 
-    resources :chats, only: [:create]
+    # chat = ressource du projet (1 chat par projet)
+    resource :chat, only: [:create, :destroy] do
+      resources :messages, only: [:create]
+    end
   end
 end
