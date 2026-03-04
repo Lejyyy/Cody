@@ -1,5 +1,7 @@
 <div class="container py-4">
-  <h1 class="mb-3">Projets</h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Projets</h1>
+  </div>
 
   <% if @projects.any? %>
     <div class="list-group">
@@ -14,6 +16,6 @@
       <% end %>
     </div>
   <% else %>
-    <p class="text-muted">Aucun projet.</p>
+    <p class="text-muted">Aucun projet pour l’instant.</p>
   <% end %>
 </div>
