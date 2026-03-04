@@ -1,24 +1,19 @@
 <div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="mb-0">Mes projets</h1>
-  </div>
+  <h1 class="mb-3">Projets</h1>
 
   <% if @projects.any? %>
     <div class="list-group">
       <% @projects.each do |project| %>
         <%= link_to project_path(project), class: "list-group-item list-group-item-action" do %>
           <div class="d-flex justify-content-between">
-            <strong><%= project.respond_to?(:title) ? project.title : project.name %></strong>
+            <strong><%= project.name %></strong>
             <small class="text-muted"><%= l(project.created_at, format: :short) %></small>
           </div>
-          <div class="text-muted">
-            <% desc = project.respond_to?(:description) ? project.description : project.content %>
-            <%= truncate(desc.to_s, length: 120) %>
-          </div>
+          <div class="text-muted"><%= truncate(project.content.to_s, length: 120) %></div>
         <% end %>
       <% end %>
     </div>
   <% else %>
-    <p class="text-muted">Aucun projet pour l’instant.</p>
+    <p class="text-muted">Aucun projet.</p>
   <% end %>
 </div>
