@@ -4,11 +4,12 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show]
 
-resources :projects, only: [:index, :show, :new, :create] do
-  resources :chats, only: [:create]
-end
+  resources :projects, only: [:index, :show, :new, :create] do
+    member do
+      get :generate
+      post :kickoff
+    end
 
-  resources :chats, only: [:destroy] do
-    resources :messages, only: [:create]
+    resources :chats, only: [:create]
   end
 end

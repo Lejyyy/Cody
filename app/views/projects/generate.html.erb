@@ -1,0 +1,10 @@
+<h1>Générer le plan du projet</h1>
+
+<p><strong><%= @project.name %></strong></p>
+<p><%= @project.short_description %></p>
+
+<%= button_to "Lancer la génération IA", kickoff_project_path(@project), method: :post, data: { turbo: false } %>
+
+<p style="margin-top: 1rem;">
+  <%= link_to "Passer et aller à la discussion", project_path(@project) %>
+</p>

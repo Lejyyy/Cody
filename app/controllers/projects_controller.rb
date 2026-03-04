@@ -1,11 +1,13 @@
 # app/controllers/projects_controller.rb
 class ProjectsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_project, only: [:show, :generate, :kickoff]
+
   def index
     @projects = current_user.projects.order(created_at: :desc)
   end
 
   def show
-    @project = current_user.projects.find(params[:id])
     @chat = current_user.chats.find_by(project: @project)
     @messages = @chat&.messages&.order(:created_at) || []
     @message = Message.new
@@ -15,30 +17,47 @@ class ProjectsController < ApplicationController
     @project = Project.new
   end
 
+  # ✅ Step 1: create project record only, then go to generation page
   def create
     @project = current_user.projects.build(project_params)
 
     if @project.save
-      chat = current_user.chats.find_or_create_by!(project: @project)
-
-      # Génère un premier message IA uniquement si le chat est vide (évite doublons)
-      if chat.messages.none?
-        ai_text = kickoff_ai_for(@project)
-
-        chat.messages.create!(
-          user: current_user,
-          role: "assistant",
-          content: ai_text
-        )
+      respond_to do |format|
+        format.html { redirect_to generate_project_path(@project), notice: "Projet créé. On passe à la génération." }
+        format.turbo_stream { redirect_to generate_project_path(@project), notice: "Projet créé. On passe à la génération." }
       end
-
-      redirect_to project_path(@project), notice: "Projet créé."
     else
       render :new, status: :unprocessable_entity
     end
   end
 
+  # ✅ Step 2: display generation page (wizard)
+  def generate
+    # Ici tu peux afficher un écran de confirmation + bouton “Générer”
+    # et éventuellement un aperçu du prompt.
+  end
+
+  # ✅ Step 3: run AI once, create chat + first assistant message, then go to discussion
+  def kickoff
+    chat = current_user.chats.find_or_create_by!(project: @project)
+
+    if chat.messages.none?
+      ai_text = kickoff_ai_for(@project)
+      chat.messages.create!(
+        user: current_user,
+        role: "assistant",
+        content: ai_text
+      )
+    end
+
+    redirect_to project_path(@project), notice: "Génération terminée."
+  end
+
   private
+
+  def set_project
+    @project = current_user.projects.find(params[:id])
+  end
 
   def project_params
     params.require(:project).permit(
