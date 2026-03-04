@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  # rubocop:disable Metrics/MethodLength
   def create
     chat = current_user.chats.find(params[:chat_id])
 
@@ -35,19 +36,25 @@ class MessagesController < ApplicationController
     <<~PROMPT
       Tu es un assistant IA qui aide un développeur à structurer son projet.
 
-      Projet :
+      Contexte du projet (formulaire) :
       - Titre : #{project.name}
-      - Description : #{project.content}
+      - Catégorie : #{project.category}
+      - Durée : #{project.duration}
+      - Niveau : #{project.level_project}
+      - Stack : #{project.stack}
+      - Short description : #{project.short_description}
+      - Long description : #{project.content}
 
       Message utilisateur :
       #{user_input}
 
       Réponds de façon structurée :
-      1. Compréhension du besoin
-      2. MVP conseillé
-      3. Stack recommandée
-      4. Profils nécessaires
-      5. Risques & quick wins
+      1) Compréhension du besoin
+      2) Suggestions produit (MVP puis évolutions)
+      3) Stack & architecture recommandée
+      4) Profils nécessaires / roadmap
+      5) Risques + quick wins
     PROMPT
   end
 end
+# rubocop:enable Metrics/MethodLength
